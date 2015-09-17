@@ -277,6 +277,6 @@ class Wasabi extends Command
 		$this->info($this->dump_string);	
 		$this->info('DONT FORGET TO REMOVE THE WASABI SETUP DIRECTORY FOUND AT '.PHP_EOL.'"'.$this->WASABI_DIR.'"');			
 		// See: https://adamcod.es/2013/03/07/composer-install-vs-composer-update.html
-		$this->info(PHP_EOL.PHP_EOL.'Now run composer update to compelete the installation... Good luck! :)');			
+		$this->info(PHP_EOL.PHP_EOL.'Now run composer update to compelete the installation, then go kick some ass! ...Good luck! :)');			
     }
 }
