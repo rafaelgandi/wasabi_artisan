@@ -72,11 +72,13 @@ class Wasabi extends Command
 	
 	protected function get($_path) {
 		if (is_file($_path)) { return file_get_contents($_path); }
-		$this->log($_path.' is not a file.');
+		$this->_log($_path.' is not a file.');
 	}
 	
 	private function _recurseCopy($src,$dst) { 
 		// See: http://www.internoetics.com/2011/01/30/copy-the-contents-of-a-directory-from-one-location-to-another-with-php/
+		$src = rtrim($src, '/');
+		$dst = rtrim($dst, '/');
 		$dir = opendir($src); 
 		@mkdir($dst); 
 		while(false !== ( $file = readdir($dir)) ) { 
@@ -90,6 +92,7 @@ class Wasabi extends Command
 			} 
 		} 
 		closedir($dir); 
+		$this->_log($dst.' copied');
 	} 
 	
 	private function _removeDir($dir) {
@@ -112,6 +115,9 @@ class Wasabi extends Command
 				if (! copy($from, $to)) {
 					$this->_log('Unable to copy file "'.$from.'" to "'.$to.'"');
 				}	
+				else {
+					$this->_log('File '.$to.' copied');
+				}
 			}
 			else {
 				$this->_log('Unable to find file "'.$from.'" when trying to copy it');
@@ -126,7 +132,7 @@ class Wasabi extends Command
 			if (is_file($file)) {
 				if (! @unlink($file)) {
 					$this->_log('Unable to remove file "'.$file.'"');
-				}	
+				}
 			}			
 		}
 		return $this;
@@ -179,6 +185,9 @@ class Wasabi extends Command
 		if (! copy($this->WASABI_DIR.'/public/index.php', public_path('index.php'))) {
 			$this->_log('ERROR! Unable to copy public/index.php');
 		}
+		else {
+			$this->_log(public_path('index.php').' copied');
+		}
 		$this->_log('public dir changes done...');
 	}
 	
@@ -194,42 +203,49 @@ class Wasabi extends Command
 	private function _appDirectory() {
 		$this->_log('doing app dir changes...');
 		// app/Exceptions/Handler.php //
-		$this->_removeFiles(app_path('/Exceptions/Handler.php'));
-		if (! copy($this->WASABI_DIR.'/app/Exceptions/Handler.php', app_path('/Exceptions/Handler.php'))) {
+		$this->_removeFiles(app_path('Exceptions/Handler.php'));
+		if (! copy($this->WASABI_DIR.'/app/Exceptions/Handler.php', app_path('Exceptions/Handler.php'))) {
 			$this->_log('ERROR! Unable to copy /app/Exceptions/Handler.php');
 		}
+		else {
+			$this->_log(app_path('Exceptions/Handler.php').' copied');
+		}
 		// Controllers and Routes //
-		$this->_recurseCopy($this->WASABI_DIR.'/app/Http/Routes/', app_path('/Http/Routes/')); // Make a Routes directory
+		$this->_recurseCopy($this->WASABI_DIR.'/app/Http/Routes/', app_path('Http/Routes/')); // Make a Routes directory
 		$this->_copyFiles([
-			$this->WASABI_DIR.'/app/Http/Controllers/AuthController.php' => app_path('/Http/Controllers/AuthController.php'),
-			$this->WASABI_DIR.'/app/Http/Controllers/WasabiBaseController.php' => app_path('/Http/Controllers/WasabiBaseController.php'),
-			$this->WASABI_DIR.'/app/Http/routes.php' => app_path('/Http/routes.php')		
+			$this->WASABI_DIR.'/app/Http/Controllers/AuthController.php' => app_path('Http/Controllers/AuthController.php'),
+			$this->WASABI_DIR.'/app/Http/Controllers/WasabiBaseController.php' => app_path('Http/Controllers/WasabiBaseController.php'),
+			$this->WASABI_DIR.'/app/Http/routes.php' => app_path('Http/routes.php')		
 		]);	
 		// Helpers dir //
-		$this->_recurseCopy($this->WASABI_DIR.'/app/Helpers/', app_path('/Helpers/'));
-		$this->_recurseCopy($this->WASABI_DIR.'/app/Nkie12/', app_path('/Nkie12/')); // <-- VERY IMPORTANT
-		$this->_recurseCopy($this->WASABI_DIR.'/app/third_party/', app_path('/third_party/'));
+		$this->_recurseCopy($this->WASABI_DIR.'/app/Helpers/', app_path('Helpers/'));
+		$this->_recurseCopy($this->WASABI_DIR.'/app/Nkie12/', app_path('Nkie12/')); // <-- VERY IMPORTANT
+		$this->_recurseCopy($this->WASABI_DIR.'/app/third_party/', app_path('third_party/'));
 		// Wasabi Utility Components //
 		$this->_copyFiles([
-			$this->WASABI_DIR.'/app/app_autoloader.php' => app_path('/app_autoloader.php'),
-			$this->WASABI_DIR.'/app/Assets.php' => app_path('/Assets.php'),
-			$this->WASABI_DIR.'/app/Crypt.php' => app_path('/Crypt.php'),
-			$this->WASABI_DIR.'/app/Files.php' => app_path('/Files.php'),
-			$this->WASABI_DIR.'/app/Json.php' => app_path('/Json.php'),
-			$this->WASABI_DIR.'/app/Helpers.php' => app_path('/Helpers.php'),
-			$this->WASABI_DIR.'/app/Upload.php' => app_path('/Upload.php')		
+			$this->WASABI_DIR.'/app/app_autoloader.php' => app_path('app_autoloader.php'),
+			$this->WASABI_DIR.'/app/Assets.php' => app_path('Assets.php'),
+			$this->WASABI_DIR.'/app/Crypt.php' => app_path('Crypt.php'),
+			$this->WASABI_DIR.'/app/Files.php' => app_path('Files.php'),
+			$this->WASABI_DIR.'/app/Json.php' => app_path('Json.php'),
+			$this->WASABI_DIR.'/app/Helpers.php' => app_path('Helpers.php'),
+			$this->WASABI_DIR.'/app/Upload.php' => app_path('Upload.php')		
 		]);		
 		$this->_log('app dir changes done...');
 	}
 	
 	private function _wasabiExit() {
 		$root_dir = app_path('..');
-		$this->_log('Wasabified at '.date('Y-m-d'));
-		$this->_log('============================================');
+		// Add wasabi custom welcome page //
+		unlink($root_dir.'/resources/views/welcome.blade.php');
+		$this->_copyFiles([
+			$this->WASABI_DIR.'/welcome.blade.php' => $root_dir.'/resources/views/welcome.blade.php'
+		]);
+		$this->_log('====================================================');
+		$this->_log('Wasabified at '.date('Y-m-d @ h:i:s A'));
+		$this->_log('====================================================');
 		$this->_makeFileIfNotExists($root_dir.'/wasabified.dump', $this->dump_string);
-		
-		// delete wasabi setup directory here //
-		//$this->_removeDir($this->WASABI_DIR);
+		return $this;
 	}
 
     /**
@@ -243,8 +259,12 @@ class Wasabi extends Command
 		if (is_file(app_path('../wasabified.dump'))) {
 			$this->info('Wasabi has already been installed here');	
 			return;
-		}		
-		$confirmation_message = 'Confirm installation. Wasabi currently works on Laravel version 5.1.10. Your current version installed is '.$laravel::VERSION.'. Do you wish to continue?';
+		}	
+		if (! $this->_isDir($this->WASABI_DIR)) {
+			$this->info('Unable to find the wasabi setup directory(wasabi_artisan)');	
+			return;
+		}	
+		$confirmation_message = 'Confirm installation. Wasabi currently works on Laravel version 5.1.10.'.PHP_EOL.' Your current version installed is '.$laravel::VERSION.'. '.PHP_EOL.'Do you wish to continue?';
 		if (! $this->confirm($confirmation_message, false)) {
 			$this->comment('Thanks for stopping by :)');
 			return;
@@ -253,8 +273,10 @@ class Wasabi extends Command
 		$this->_publicDirectory();
 		$this->_configDirectory();
 		$this->_appDirectory();
-		$this->_log('============================================');
 		$this->_wasabiExit();
-		$this->info($this->dump_string);				
+		$this->info($this->dump_string);	
+		$this->info('DONT FORGET TO REMOVE THE WASABI SETUP DIRECTORY FOUND AT '.PHP_EOL.'"'.$this->WASABI_DIR.'"');			
+		// See: https://adamcod.es/2013/03/07/composer-install-vs-composer-update.html
+		$this->info(PHP_EOL.PHP_EOL.'Now run composer update to compelete the installation... Good luck! :)');			
     }
 }
