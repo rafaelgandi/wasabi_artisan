@@ -229,6 +229,7 @@ class Wasabi extends Command
 		$this->_makeFileIfNotExists($root_dir.'/wasabified.dump', $this->dump_string);
 		
 		// delete wasabi setup directory here //
+		//$this->_removeDir($this->WASABI_DIR);
 	}
 
     /**
@@ -238,8 +239,14 @@ class Wasabi extends Command
      */
     public function handle() {
 		set_time_limit(0);
+		$laravel = app(); // See: http://www.elcoderino.com/check-laravel-version/
 		if (is_file(app_path('../wasabified.dump'))) {
 			$this->info('Wasabi has already been installed here');	
+			return;
+		}		
+		$confirmation_message = 'Confirm installation. Wasabi currently works on Laravel version 5.1.10. Your current version installed is '.$laravel::VERSION.'. Do you wish to continue?';
+		if (! $this->confirm($confirmation_message, false)) {
+			$this->comment('Thanks for stopping by :)');
 			return;
 		}
 		$this->_rootDirectory();
@@ -248,6 +255,6 @@ class Wasabi extends Command
 		$this->_appDirectory();
 		$this->_log('============================================');
 		$this->_wasabiExit();
-		$this->info($this->dump_string);		
+		$this->info($this->dump_string);				
     }
 }
