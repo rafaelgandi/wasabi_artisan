@@ -5,8 +5,8 @@ Setup wasabi on a Laravel 5 installation using php artisan
 
 ## Installation
 Just follow the [Laravel 5 artisan](http://laravel.com/docs/5.0/artisan) command registration [here](http://laravel.com/docs/5.0/commands#registering-commands). 
-Copy the *Wasabi.php* file and wasabi_artisan directory to *app/Console/Commands/* directory. 
-And add `\App\Console\Commands\Wasabi::class` to the `$commands` property of *Kerner.php* found at *app/Console/*.
+Copy the **Wasabi.php** file and **wasabi_artisan** directory to **app/Console/Commands/** directory. 
+And add `\App\Console\Commands\Wasabi::class` to the `$commands` property of **Kerner.php** found at **app/Console/**
 
 ```PHP
 class Kernel extends ConsoleKernel
