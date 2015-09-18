@@ -45,9 +45,7 @@ class Upload extends App\Nkie12\NinDo {
 	protected function getExtension($_file) {
 		$uploader = new fileManager;
 		$ext = $uploader->getExtension($_file);
-		if ($ext) {
-			return strtolower($ext);
-		}
+		if ($ext) { return strtolower($ext); }
 		return '';
 	}
 	

@@ -153,8 +153,7 @@ class Wasabi extends Command
 			$root_dir.'/composer.lock' => $etc_dir.'/composer.lock',
 			$root_dir.'/package.json' => $etc_dir.'/package.json',
 			$root_dir.'/.gitignore' => $etc_dir.'/.gitignore',
-			$root_dir.'/.env' => $etc_dir.'/.env'
-			
+			$root_dir.'/.env' => $etc_dir.'/.env'			
 		];
 		$this->_copyFiles($etc_files);
 		$this->_removeFiles(array_keys($etc_files));
@@ -202,7 +201,9 @@ class Wasabi extends Command
 	
 	private function _appDirectory() {
 		$this->_log('Doing app dir changes...');
-		// app/Exceptions/Handler.php //
+		// Setup the exception hanlders. This is where we setup the Wooops component and handle custom error 
+		// views to call.	
+		// File: app/Exceptions/Handler.php
 		$this->_removeFiles(app_path('Exceptions/Handler.php'));
 		if (! copy($this->WASABI_DIR.'/app/Exceptions/Handler.php', app_path('Exceptions/Handler.php'))) {
 			$this->_log('ERROR! Unable to copy /app/Exceptions/Handler.php');
@@ -217,7 +218,6 @@ class Wasabi extends Command
 			$this->WASABI_DIR.'/app/Http/Controllers/WasabiBaseController.php' => app_path('Http/Controllers/WasabiBaseController.php'),
 			$this->WASABI_DIR.'/app/Http/routes.php' => app_path('Http/routes.php')		
 		]);	
-		// Helpers dir //
 		$this->_recurseCopy($this->WASABI_DIR.'/app/Helpers/', app_path('Helpers/'));
 		$this->_recurseCopy($this->WASABI_DIR.'/app/Nkie12/', app_path('Nkie12/')); // <-- VERY IMPORTANT
 		$this->_recurseCopy($this->WASABI_DIR.'/app/third_party/', app_path('third_party/'));
@@ -250,9 +250,10 @@ class Wasabi extends Command
 	private function _outro() {	
 		date_default_timezone_set('Asia/Singapore');
 		$this->_log('====================================================');
-		$this->_log('Wasabified at '.date('Y-m-d @ h:i:s A'));
+		$this->_log('Wasabified: '.date('Y-m-d @ h:i:s A'));
 		$this->_log('====================================================');
-		$this->_makeFileIfNotExists(app_path('../wasabified.dump'), $this->dump_string);
+		$info_message = PHP_EOL.PHP_EOL.'This file is generated to prove that this installation of Laravel has been installed with Wasabi';
+		$this->_makeFileIfNotExists(app_path('../wasabified.dump'), $this->dump_string.$info_message);
 		return $this;
 	}
 

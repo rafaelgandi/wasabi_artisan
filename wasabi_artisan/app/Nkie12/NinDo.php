@@ -41,5 +41,6 @@ abstract class NinDo { // <-- See: http://naruto.wikia.com/wiki/Nind%C5%8D (My t
 	// LM: 09-02-2015 
 	// Made into an abstract class
 	abstract public static function instance();
+	// ie. public static function instance() { return parent::getInstance(); } <-- Sample implementation on the child class
 	
 }

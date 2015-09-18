@@ -4,7 +4,6 @@ namespace App;
 use App;
 use App\Nkie12;
 use Exception;
-use Respect\Validation\Validator; // See: https://github.com/Respect/Validation
 
 class Crypt extends App\Nkie12\NinDo {
 	public static function instance() { return parent::getInstance(); }

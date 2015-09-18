@@ -7,5 +7,5 @@
 |___|                                  |___|
 https://github.com/rafaelgandi/wasabi_artisan                                           
 ====================================================
-Version 1.0 | Rafael Gandionco | www.rafaelgandi.tk
+Rafael Gandionco | Version 1.0 | www.rafaelgandi.tk
 ====================================================
