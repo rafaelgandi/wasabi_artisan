@@ -139,7 +139,7 @@ class Wasabi extends Command
 	}
 	
 	private function _rootDirectory() {
-		$this->_log('doing root changes...');
+		$this->_log('Doing root changes...');
 		$root_dir = app_path('..');
 		$etc_dir = $this->_makeDirIfNotExists($root_dir.'/etc');
 		// Backup the initial installation files from laravel //
@@ -167,12 +167,12 @@ class Wasabi extends Command
 			$this->WASABI_DIR.'/.gitignore' => $root_dir.'/.gitignore',
 			$this->WASABI_DIR.'/environment.php' => $root_dir.'/environment.php'
 		]);	
-		$this->_log('root changes done...');
+		$this->_log('Root changes done.');
 		return $this;
 	}
 	
 	private function _publicDirectory() {
-		$this->_log('doing public dir changes...');
+		$this->_log('Doing public dir changes...');
 		$this->_makeDirIfNotExists(public_path('js/'));
 		$this->_makeDirIfNotExists(public_path('css/'));
 		$this->_makeDirIfNotExists(public_path('uploads/'));
@@ -188,20 +188,20 @@ class Wasabi extends Command
 		else {
 			$this->_log(public_path('index.php').' copied');
 		}
-		$this->_log('public dir changes done...');
+		$this->_log('Public dir changes done.');
 	}
 	
 	private function _configDirectory() {
-		$this->_log('doing config dir changes...');
+		$this->_log('Doing config dir changes...');
 		$config_path = config_path();
 		$this->_removeDir($config_path); // remove the current config dir
 		$this->_makeDirIfNotExists($config_path); // make the dir again
 		$this->_recurseCopy($this->WASABI_DIR.'/config/', $config_path); // place the wasabified config files
-		$this->_log('config dir changes done...');
+		$this->_log('Config dir changes done.');
 	}
 	
 	private function _appDirectory() {
-		$this->_log('doing app dir changes...');
+		$this->_log('Doing app dir changes...');
 		// app/Exceptions/Handler.php //
 		$this->_removeFiles(app_path('Exceptions/Handler.php'));
 		if (! copy($this->WASABI_DIR.'/app/Exceptions/Handler.php', app_path('Exceptions/Handler.php'))) {
@@ -231,20 +231,28 @@ class Wasabi extends Command
 			$this->WASABI_DIR.'/app/Helpers.php' => app_path('Helpers.php'),
 			$this->WASABI_DIR.'/app/Upload.php' => app_path('Upload.php')		
 		]);		
-		$this->_log('app dir changes done...');
+		$this->_log('App dir changes done.');
 	}
 	
-	private function _wasabiExit() {
-		$root_dir = app_path('..');
+	private function _resourcesDirectory() {
+		$this->_log('Doing resources dir changes...');
+		$resource_dir = app_path('../resources');
+		// Custom wasabi 404, 500, etc.. pages //
+		$this->_recurseCopy($this->WASABI_DIR.'/resources/views/errors/custom/', $resource_dir.'/views/errors/custom/');
 		// Add wasabi custom welcome page //
-		unlink($root_dir.'/resources/views/welcome.blade.php');
+		unlink($resource_dir.'/views/welcome.blade.php');
 		$this->_copyFiles([
-			$this->WASABI_DIR.'/welcome.blade.php' => $root_dir.'/resources/views/welcome.blade.php'
+			$this->WASABI_DIR.'/resources/views/welcome.blade.php' => $resource_dir.'/views/welcome.blade.php'
 		]);
+		$this->_log('Resources dir changes done.');
+	}
+	
+	private function _outro() {	
+		date_default_timezone_set('Asia/Singapore');
 		$this->_log('====================================================');
 		$this->_log('Wasabified at '.date('Y-m-d @ h:i:s A'));
 		$this->_log('====================================================');
-		$this->_makeFileIfNotExists($root_dir.'/wasabified.dump', $this->dump_string);
+		$this->_makeFileIfNotExists(app_path('../wasabified.dump'), $this->dump_string);
 		return $this;
 	}
 
@@ -269,11 +277,13 @@ class Wasabi extends Command
 			$this->comment('Thanks for stopping by :)');
 			return;
 		}
+		$this->info('Installing awesomeness...');
 		$this->_rootDirectory();
 		$this->_publicDirectory();
 		$this->_configDirectory();
 		$this->_appDirectory();
-		$this->_wasabiExit();
+		$this->_resourcesDirectory();
+		$this->_outro();
 		$this->info($this->dump_string);	
 		$this->info('DONT FORGET TO REMOVE THE WASABI SETUP DIRECTORY FOUND AT '.PHP_EOL.'"'.$this->WASABI_DIR.'"');			
 		// See: https://adamcod.es/2013/03/07/composer-install-vs-composer-update.html
