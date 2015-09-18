@@ -175,7 +175,7 @@ class Wasabi extends Command
 		$this->_makeDirIfNotExists(public_path('js/'));
 		$this->_makeDirIfNotExists(public_path('css/'));
 		$this->_makeDirIfNotExists(public_path('uploads/'));
-		// Populate the necessary directories //
+		// Populate the necessary asset directories //
 		$this->_recurseCopy($this->WASABI_DIR.'/public/js/', public_path('js/'));
 		$this->_recurseCopy($this->WASABI_DIR.'/public/css/', public_path('css/'));
 		$this->_recurseCopy($this->WASABI_DIR.'/public/uploads/', public_path('uploads/'));

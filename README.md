@@ -30,4 +30,4 @@ Type in the artisan command below to your console to install wasabi to laravel 5
 $ php artisan wasabi
 ```
 
-## Good luck! :)
+## ...Good luck! :)
