@@ -163,7 +163,7 @@ class Wasabi extends Command
 			$this->WASABI_DIR.'/composer.lock' => $root_dir.'/composer.lock',
 			$this->WASABI_DIR.'/package.json' => $root_dir.'/package.json',
 			$this->WASABI_DIR.'/.env' => $root_dir.'/.env',
-			$this->WASABI_DIR.'/.gitignore' => $root_dir.'/.gitignore',
+			$this->WASABI_DIR.'/templates/gitignore.txt' => $root_dir.'/.gitignore',
 			$this->WASABI_DIR.'/environment.php' => $root_dir.'/environment.php'
 		]);	
 		$this->_log('Root changes done.');
@@ -249,6 +249,9 @@ class Wasabi extends Command
 	
 	private function _outro() {	
 		date_default_timezone_set('Asia/Singapore');
+		$this->_log('Now go update your: ');
+		$this->_log('> C:\Windows\System32\drivers\etc\hosts');
+		$this->_log('> C:\xampp\apache\conf\extra\httpd-vhosts.conf');
 		$this->_log('====================================================');
 		$this->_log('Wasabified: '.date('Y-m-d @ h:i:s A'));
 		$this->_log('====================================================');
