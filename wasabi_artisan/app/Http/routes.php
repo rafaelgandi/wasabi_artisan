@@ -10,9 +10,17 @@
 | and give it the controller to call when that URI is requested.
 |
 */
-
-include_once app_path('Http/Routes/base_routes.php');
-
-Route::get('/', function () { return view('welcome'); });
+// Wasabi //
+// Automatically load all the route files inside Routes/ directory //
+call_user_func(function () {
+	$routes_dir = app_path('Http/Routes');
+	$route_files = glob($routes_dir.'/*_routes.php');
+	if ($route_files === false) { return; }
+	foreach ($route_files as $file) {
+		if (is_file($file) && strpos($file, '_routes.php') !== false) {
+			include_once $file;
+		}
+	}
+});
 
 
