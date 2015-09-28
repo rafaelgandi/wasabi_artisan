@@ -1,4 +1,5 @@
 <?php
+// Wasabi //
 // Used to fix php notices on composer CLI //
 if (! defined('ENV_PREFIX')) { define('ENV_PREFIX', ''); }
 
@@ -193,6 +194,9 @@ return [
         'URL'       => Illuminate\Support\Facades\URL::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View'      => Illuminate\Support\Facades\View::class,
+		
+		// See: http://laravel.io/forum/03-12-2014-class-carbon-not-found
+		'Carbon' => 'Carbon\Carbon'
 
     ],
 
