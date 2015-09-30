@@ -18,6 +18,7 @@ Route::group(['prefix' => 'wasabi'], function () {
 	});
 	
 	Route::get('/php/errors', function () {
+		set_time_limit(0); // For really long logs
 		error_reporting(E_ALL & ~E_NOTICE); // for development 
 		ini_set('display_errors', '1'); // show errors, remove when deployed
 		//echo App\Paths::docRoot(get_config('php_error_log'));
@@ -115,6 +116,14 @@ Route::group(['prefix' => 'wasabi'], function () {
 		}
 		else {
 			echo '<p class="warn">APC caching is not available. Would have been useful though.</p>';
+		}
+		
+		// Check Fileinfo extension //
+		if (function_exists('finfo_open')) {
+			echo '<p>Fileinfo extension is installed</p>';
+		}
+		else {
+			echo '<p class="warn">Fileinfo extension is NOT installed.</p>';
 		}
 	});
 });
