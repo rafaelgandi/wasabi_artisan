@@ -32,12 +32,6 @@ Route::get('/sessions', function () {
 	_pr(session()->all());
 });
 
-Route::get('/throw404', function () {
-	// Redirect to 404 page.
-	// See: http://laravel.com/docs/5.0/errors#http-exceptions
-	abort(404);
-});
-
 Route::get('/testing', function () {
 	
 });

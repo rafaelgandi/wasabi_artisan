@@ -17,8 +17,28 @@ Route::group(['prefix' => 'wasabi'], function () {
 		echo '</pre></body></html>';
 	});
 	
+	// Backup logs to database and clear log file //
+	Route::any('/backup/logs', function () {
+		if (isset($_POST['xplogs_backup'])) {
+			var_dump(App\Xplog::backup());	
+			var_dump(App\Xplog::clear());				
+		}
+		else {
+			echo '
+				<!DOCTYPE html>
+				<html>
+				<body>
+				<form action="" method="post" >
+					Backup wasabi logs:<br>
+					<input type="submit" value="Backup" name="xplogs_backup">
+					<input type="hidden" name="_token" id="token" value="'.csrf_token().'">
+				</form>
+				</body>
+				</html>';
+		}
+	});
+	
 	Route::get('/php/errors', function () {
-		set_time_limit(0); // For really long logs
 		error_reporting(E_ALL & ~E_NOTICE); // for development 
 		ini_set('display_errors', '1'); // show errors, remove when deployed
 		//echo App\Paths::docRoot(get_config('php_error_log'));
