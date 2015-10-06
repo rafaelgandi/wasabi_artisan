@@ -42,6 +42,31 @@ class Upload extends App\Nkie12\NinDo {
 		);
 	}
 	
+	protected function foo() {
+		return 'bar';
+	}
+	
+	protected function saveBase64($_base64_str='', $_options=[]) { 
+		$options = array_merge([
+			'destination' => storage_path(),
+			'extension' => 'file',
+			'filename' => time()	
+		], $_options);
+		$error = '';
+		$base64_str = trim($_base64_str);
+		if ($base64_str === '') { return false; }
+		// See: http://www.tricksofit.com/2014/10/save-base64-encoded-image-to-file-using-php#.VhMnlPmqqko
+		$data = base64_decode($base64_str);
+		$coded_name = $this->_getCodedName($options['filename']).'.'.strtolower($options['extension']);
+		$file_path = rtrim($options['destination'], '/').'/'.$coded_name;
+		App\Files::put($file_path, $data);
+		return (object) [
+			'coded_name' => $coded_name,
+			'filename' => $options['filename'],
+			'extension' => $options['extension']
+		];
+	}
+	
 	protected function getExtension($_file) {
 		$uploader = new fileManager;
 		$ext = $uploader->getExtension($_file);

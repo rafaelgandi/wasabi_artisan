@@ -232,7 +232,8 @@ class Wasabi extends Command
 			$this->WASABI_DIR.'/app/Files.php' => app_path('Files.php'),
 			$this->WASABI_DIR.'/app/Json.php' => app_path('Json.php'),
 			$this->WASABI_DIR.'/app/Helpers.php' => app_path('Helpers.php'),
-			$this->WASABI_DIR.'/app/Upload.php' => app_path('Upload.php')		
+			$this->WASABI_DIR.'/app/Upload.php' => app_path('Upload.php'),		
+			$this->WASABI_DIR.'/app/Xplog.php' => app_path('Xplog.php')		
 		]);		
 		$this->_log('App dir changes done.');
 	}
