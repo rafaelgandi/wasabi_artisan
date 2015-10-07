@@ -42,10 +42,6 @@ class Upload extends App\Nkie12\NinDo {
 		);
 	}
 	
-	protected function foo() {
-		return 'bar';
-	}
-	
 	protected function saveBase64($_base64_str='', $_options=[]) { 
 		$options = array_merge([
 			'destination' => storage_path(),
