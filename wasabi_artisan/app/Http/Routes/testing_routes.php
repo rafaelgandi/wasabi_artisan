@@ -121,4 +121,7 @@ dIB93Tp06dAZjiw+GSUTWZPKL8dM1YNusCHEzViNr5AoYuACN6wfao1zkANaVoyCyCB6v5emh9s1
 		'extension' => 'jpg',
 		'wasabiii.jpg'
 	])); */
+	//return 'aaaaa';
+	//App\Xplog::write('asdfasdf');
+	return App\Upload::foo();
 });

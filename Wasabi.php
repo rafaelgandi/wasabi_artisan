@@ -99,9 +99,9 @@ class Wasabi extends Command
 		if (! is_dir($dir)) { return; }	
 		foreach(glob($dir . '/*') as $file) { 
 			if (is_dir($file)) { $this->_removeDir($file); } 
-			else { unlink($file); }
+			else { @unlink($file); }
 		} 
-		rmdir($dir); 
+		@rmdir($dir); 
 	}
 	
 	private function _log($_msg) {
@@ -160,7 +160,7 @@ class Wasabi extends Command
 		// Replace with the files from wasabi //
 		$this->_copyFiles([
 			$this->WASABI_DIR.'/composer.json' => $root_dir.'/composer.json',
-			$this->WASABI_DIR.'/composer.lock' => $root_dir.'/composer.lock',
+			//$this->WASABI_DIR.'/composer.lock' => $root_dir.'/composer.lock',
 			$this->WASABI_DIR.'/package.json' => $root_dir.'/package.json',
 			$this->WASABI_DIR.'/.env' => $root_dir.'/.env',
 			$this->WASABI_DIR.'/templates/gitignore.txt' => $root_dir.'/.gitignore',
@@ -253,6 +253,8 @@ class Wasabi extends Command
 	
 	private function _outro() {	
 		date_default_timezone_set('Asia/Singapore');
+		$this->_log('Attempting to remove /app/Console/Commands/wasabi_artisan/...');
+		$this->_removeDir(app_path('Console/Commands/wasabi_artisan'));
 		$this->_log('Now go update your: ');
 		$this->_log('> C:\Windows\System32\drivers\etc\hosts');
 		$this->_log('> C:\xampp\apache\conf\extra\httpd-vhosts.conf');
@@ -293,8 +295,8 @@ class Wasabi extends Command
 		$this->_resourcesDirectory();
 		$this->_outro();
 		$this->info($this->dump_string);	
-		$this->info('DONT FORGET TO REMOVE THE WASABI SETUP DIRECTORY FOUND AT '.PHP_EOL.'"'.$this->WASABI_DIR.'"');			
+		$this->info('!!!!!! DONT FORGET TO REMOVE THE WASABI SETUP DIRECTORY FOUND AT '.PHP_EOL.'"'.$this->WASABI_DIR.'" BEFORE RUNNING COMPOSER !!!!!!');			
 		// See: https://adamcod.es/2013/03/07/composer-install-vs-composer-update.html
-		$this->info(PHP_EOL.PHP_EOL.'Now run composer update to compelete the installation, then go kick some ass! ...Good luck! :)');			
+		$this->info(PHP_EOL.PHP_EOL.'After deleting "'.$this->WASABI_DIR.'", run composer update to compelete the installation, then go kick some ass! ...Good luck! :)');			
     }
 }
