@@ -160,7 +160,6 @@ class Wasabi extends Command
 		// Replace with the files from wasabi //
 		$this->_copyFiles([
 			$this->WASABI_DIR.'/composer.json' => $root_dir.'/composer.json',
-			//$this->WASABI_DIR.'/composer.lock' => $root_dir.'/composer.lock',
 			$this->WASABI_DIR.'/package.json' => $root_dir.'/package.json',
 			$this->WASABI_DIR.'/.env' => $root_dir.'/.env',
 			$this->WASABI_DIR.'/templates/gitignore.txt' => $root_dir.'/.gitignore',
