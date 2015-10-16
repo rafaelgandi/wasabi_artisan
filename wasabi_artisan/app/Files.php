@@ -140,6 +140,8 @@ class Files extends App\Nkie12\NinDo {
 		if (! $this->isFile($_path)) {
 			$this->makeFile($_path, $_contents);
 		}
+		// See: http://stackoverflow.com/questions/6433643/file-permissions-and-chmod-how-to-set-777-in-php-upon-file-creation		
+		chmod($_path, 0777);
 		return $_path;
 	}	
 	

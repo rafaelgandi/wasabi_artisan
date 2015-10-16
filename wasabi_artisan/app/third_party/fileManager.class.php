@@ -50,11 +50,11 @@ if (!class_exists('fileManager')):
             
             if ($this->error) {
                 if ($this->printError)
-                    print $this->error;
+                    throw new Exception($this->error);
             } else {
                 move_uploaded_file($file['tmp_name'], $this->destination . $this->fileName) or $this->error .= 'Destination Directory Permission Problem('.$this->destination . $this->fileName.').<br />';
                 if ($this->error && $this->printError)
-                    print $this->error;
+                    throw new Exception($this->error);
             }
         }
         public function delete($file) {
@@ -66,7 +66,7 @@ if (!class_exists('fileManager')):
             }
             
             if ($this->error && $this->printError)
-                print $this->error;
+                throw new Exception($this->error);
         }
         //END: Process File Functions
         
