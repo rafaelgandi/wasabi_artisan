@@ -31,4 +31,10 @@ class Json extends App\Nkie12\NinDo {
 		return mb_convert_encoding($value,'UTF-8','UTF-8');
 	}
 	
+	protected function isValid($_string='') {
+		// See: http://stackoverflow.com/questions/6041741/fastest-way-to-check-if-a-string-is-json-in-php
+		json_decode($_string);
+		return (json_last_error() == JSON_ERROR_NONE);
+	}
+	
 }
